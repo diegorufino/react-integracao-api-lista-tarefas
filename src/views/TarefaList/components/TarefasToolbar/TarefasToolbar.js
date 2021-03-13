@@ -45,7 +45,11 @@ const TarefasToolbar = props => {
 
   const submit = (event) => {
     event.preventDefault(); //quando der o enteder nao submiter o formulario
-    console.log(`Valores: Descrição - ${descricao}, Categoria - ${categoria}`)
+    const tarefa = {
+      descricao: descricao,
+      categoria: categoria
+    }
+    props.salvar(tarefa)
   }
 
   return (
@@ -75,7 +79,7 @@ const TarefasToolbar = props => {
               <Select value={categoria} onChange={e => setCategoria(e.target.value)}>
               <MenuItem value="">Selecione...</MenuItem>
                 <MenuItem value={"TRABALHO"}>Trabalho</MenuItem>
-                <MenuItem value={"ESTUDO"}>Estudo</MenuItem>
+                <MenuItem value={"ESTUDOS"}>Estudos</MenuItem>
                 <MenuItem value={"OUTROS"}>Outros</MenuItem>
               </Select>
             </FormControl>
