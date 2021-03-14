@@ -25,7 +25,8 @@ const TarefasList = () => {
     axios.post(API_URL, tarefa, {
       headers: headers
     }).then(response => {
-      listarTarefas();
+      const novaTarefa = response.data
+      setTarefas( [...tarefas, novaTarefa] )
     }).catch(erro => {
       console.log(erro)
     })
