@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
 import { TarefasToolbar, TarefasTable } from './components';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle
+} from '@material-ui/core'
 import axios from 'axios'
 
 const useStyles = makeStyles(theme => ({
@@ -20,6 +27,8 @@ const TarefasList = () => {
   const classes = useStyles();
 
   const [tarefas, setTarefas] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [mensagem, setMensagem] = useState('')
 
   const salvar = (tarefa) => {
     axios.post(API_URL, tarefa, {
@@ -27,8 +36,11 @@ const TarefasList = () => {
     }).then(response => {
       const novaTarefa = response.data
       setTarefas( [...tarefas, novaTarefa] )
+      setMensagem('Item adicionado com sucesso')
+      setOpenDialog(true)
     }).catch(erro => {
-      console.log(erro)
+      setMensagem('Ocorreu um erro')
+      setOpenDialog(true)
     })
   }
 
@@ -39,7 +51,8 @@ const TarefasList = () => {
       const listaDeTarefas = response.data
       setTarefas(listaDeTarefas)
     }).catch(erro => {
-      console.log(erro)
+      setMensagem('Ocorreu um erro')
+      setOpenDialog(true)
     })
   }
 
@@ -54,8 +67,11 @@ const TarefasList = () => {
         }
       })
       setTarefas(lista)
+      setMensagem('Item atualizado com sucesso')
+      setOpenDialog(true)
     }).catch(erro => {
-      console.log(erro)
+      setMensagem('Ocorreu um erro')
+      setOpenDialog(true)
     })
   }
 
@@ -66,8 +82,11 @@ const TarefasList = () => {
     .then(response => {
       const lista = tarefas.filter( tarefas => tarefas.id !== id)
       setTarefas(lista)
+      setMensagem('item removido com sucesso')
+      setOpenDialog(true)
     }).catch(erro => {
-      console.log(erro)
+      setMensagem('Ocorreu um erro')
+      setOpenDialog(true)
     })
   }
 
@@ -84,6 +103,15 @@ const TarefasList = () => {
           deleteAction={deletar}
           tarefas={tarefas} />
       </div>
+      <Dialog open={openDialog} onClose={e => setOpenDialog(false)}>
+        <DialogTitle>Atenção</DialogTitle>
+        <DialogContent>
+          {mensagem}
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={e => setOpenDialog(false)}>fechar</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

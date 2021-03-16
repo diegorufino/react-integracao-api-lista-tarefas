@@ -7,8 +7,7 @@ import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 import {
   Dashboard as DashboardView,
   TarefaList as TarefaListView,
-  SignIn as SignInView,
-  NotFound as NotFoundView
+  SignIn as SignInView
 } from './views';
 
 const Routes = () => {

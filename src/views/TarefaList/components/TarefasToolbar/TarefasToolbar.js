@@ -9,8 +9,7 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel,
-  Menu
+  InputLabel
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
