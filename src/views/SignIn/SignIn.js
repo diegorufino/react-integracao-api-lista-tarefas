@@ -133,6 +133,7 @@ const SignIn = props => {
 
   const handleSignIn = event => {
     event.preventDefault();
+    localStorage.setItem('email_usuario_logado', email)
     history.push('/');
   };
 
@@ -213,7 +214,7 @@ const SignIn = props => {
                   fullWidth
                   label="E-mail"
                   name="email"
-                  type="text"
+                  type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   variant="outlined"
