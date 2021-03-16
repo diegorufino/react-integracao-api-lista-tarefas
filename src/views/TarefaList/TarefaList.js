@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { listar } from '../../store/tarefasReducer'
+
 import { TarefasToolbar, TarefasTable } from './components';
 import {
   Button,
@@ -22,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 const API_URL = 'https://minhastarefas-api.herokuapp.com/tarefas';
 
-const TarefasList = () => {
+const TarefasList = (props) => {
   const classes = useStyles();
 
   const [tarefas, setTarefas] = useState([]);
@@ -43,17 +47,17 @@ const TarefasList = () => {
     })
   }
 
-  const listarTarefas = () => {
-    axios.get(API_URL, {
-      headers: {'x-tenant-id' : localStorage.getItem('email_usuario_logado')}
-    }).then(response => {
-      const listaDeTarefas = response.data
-      setTarefas(listaDeTarefas)
-    }).catch(erro => {
-      setMensagem('Ocorreu um erro')
-      setOpenDialog(true)
-    })
-  }
+  // const listarTarefas = () => {
+  //   axios.get(API_URL, {
+  //     headers: {'x-tenant-id' : localStorage.getItem('email_usuario_logado')}
+  //   }).then(response => {
+  //     const listaDeTarefas = response.data
+  //     setTarefas(listaDeTarefas)
+  //   }).catch(erro => {
+  //     setMensagem('Ocorreu um erro')
+  //     setOpenDialog(true)
+  //   })
+  // }
 
   const alterarStatus = (id) => {
     axios.patch(`${API_URL}/${id}`, null, {
@@ -90,7 +94,7 @@ const TarefasList = () => {
   }
 
   useEffect(() => {
-    listarTarefas();
+    props();
   }, [])
 
   return (
@@ -100,7 +104,7 @@ const TarefasList = () => {
         <TarefasTable 
           alterarStatus={alterarStatus} 
           deleteAction={deletar}
-          tarefas={tarefas} />
+          tarefas={props.tarefas} />
       </div>
       <Dialog open={openDialog} onClose={e => setOpenDialog(false)}>
         <DialogTitle>Atenção</DialogTitle>
@@ -115,4 +119,11 @@ const TarefasList = () => {
   );
 };
 
-export default TarefasList;
+const mapStateToProps = state => ({
+  tarefas: state.tarefas.tarefas
+})
+
+const mapDisptchToProps = dispatch => 
+bindActionCreators({listar}, dispatch)
+
+export default connect (mapStateToProps, mapDisptchToProps)(TarefasList);

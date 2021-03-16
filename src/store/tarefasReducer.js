@@ -1,3 +1,8 @@
+import axios from 'axios'
+
+const http = axios.create({
+    baseURL: 'https://minhastarefas-api.herokuapp.com'
+})
 
 const ACTIONS = {
     LISTAR: 'TAREFAS_LISTAR',
@@ -15,5 +20,18 @@ export const tarefaReducer = (state = ESTADO_INICIAL, action) => {
             return {...state, tarefas: action.tarefas }
         default:
             return state;
+    }
+}
+
+export function listar(){
+    return dispach => {
+        http.get('/tarefas', {
+            headers: {'x-tenant-id' : localStorage.getItem('email_usuario_logado')}
+        }).then(response => {
+            dispach({
+                type: ACTIONS.LISTAR,
+                tarefas: response.data
+            })
+        })
     }
 }
