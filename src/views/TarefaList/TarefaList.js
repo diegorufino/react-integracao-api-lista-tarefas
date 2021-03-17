@@ -3,7 +3,12 @@ import { makeStyles } from '@material-ui/styles';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { listar, salvar, deletar } from '../../store/tarefasReducer'
+import { 
+  listar, 
+  salvar,
+  deletar, 
+  alterarStatus 
+} from '../../store/tarefasReducer'
 
 import { TarefasToolbar, TarefasTable } from './components';
 import {
@@ -13,7 +18,6 @@ import {
   DialogContent,
   DialogTitle
 } from '@material-ui/core'
-import axios from 'axios'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,33 +28,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const API_URL = 'https://minhastarefas-api.herokuapp.com/tarefas';
-
 const TarefasList = (props) => {
   const classes = useStyles();
 
-  const [tarefas, setTarefas] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [mensagem, setMensagem] = useState('')
-
-  const alterarStatus = (id) => {
-    axios.patch(`${API_URL}/${id}`, null, {
-      headers: {'x-tenant-id' : localStorage.getItem('email_usuario_logado')}
-    }).then(response => {
-      const lista = [...tarefas]
-      lista.forEach(tarefa => {
-        if(tarefa.id === id){
-          tarefa.done = true;
-        }
-      })
-      setTarefas(lista)
-      setMensagem('Item atualizado com sucesso')
-      setOpenDialog(true)
-    }).catch(erro => {
-      setMensagem('Ocorreu um erro')
-      setOpenDialog(true)
-    })
-  }
 
   useEffect(() => {
     props.listar();
@@ -61,7 +43,7 @@ const TarefasList = (props) => {
       <TarefasToolbar salvar={props.salvar} />
       <div className={classes.content}>
         <TarefasTable 
-          alterarStatus={alterarStatus} 
+          alterarStatus={props.alterarStatus} 
           deleteAction={props.deletar}
           tarefas={props.tarefas} />
       </div>
@@ -83,6 +65,11 @@ const mapStateToProps = state => ({
 })
 
 const mapDisptchToProps = dispatch => 
-bindActionCreators({listar, salvar, deletar}, dispatch)
+bindActionCreators({
+  listar, 
+  salvar, 
+  deletar, 
+  alterarStatus
+}, dispatch)
 
 export default connect (mapStateToProps, mapDisptchToProps)(TarefasList);
