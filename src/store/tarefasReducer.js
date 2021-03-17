@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { mostrarMensagem } from './mensagemReducer'
 
 const http = axios.create({
     baseURL: 'https://minhastarefas-api.herokuapp.com'
