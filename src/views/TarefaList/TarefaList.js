@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { listar } from '../../store/tarefasReducer'
+import { listar, salvar } from '../../store/tarefasReducer'
 
 import { TarefasToolbar, TarefasTable } from './components';
 import {
@@ -32,32 +32,6 @@ const TarefasList = (props) => {
   const [tarefas, setTarefas] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [mensagem, setMensagem] = useState('')
-
-  const salvar = (tarefa) => {
-    axios.post(API_URL, tarefa, {
-      headers: {'x-tenant-id' : localStorage.getItem('email_usuario_logado')}
-    }).then(response => {
-      const novaTarefa = response.data
-      setTarefas( [...tarefas, novaTarefa] )
-      setMensagem('Item adicionado com sucesso')
-      setOpenDialog(true)
-    }).catch(erro => {
-      setMensagem('Ocorreu um erro')
-      setOpenDialog(true)
-    })
-  }
-
-  // const listarTarefas = () => {
-  //   axios.get(API_URL, {
-  //     headers: {'x-tenant-id' : localStorage.getItem('email_usuario_logado')}
-  //   }).then(response => {
-  //     const listaDeTarefas = response.data
-  //     setTarefas(listaDeTarefas)
-  //   }).catch(erro => {
-  //     setMensagem('Ocorreu um erro')
-  //     setOpenDialog(true)
-  //   })
-  // }
 
   const alterarStatus = (id) => {
     axios.patch(`${API_URL}/${id}`, null, {
@@ -94,12 +68,12 @@ const TarefasList = (props) => {
   }
 
   useEffect(() => {
-    props();
+    props.listar();
   }, [])
 
   return (
     <div className={classes.root}>
-      <TarefasToolbar salvar={salvar} />
+      <TarefasToolbar salvar={props.salvar} />
       <div className={classes.content}>
         <TarefasTable 
           alterarStatus={alterarStatus} 
@@ -124,6 +98,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDisptchToProps = dispatch => 
-bindActionCreators({listar}, dispatch)
+bindActionCreators({listar, salvar}, dispatch)
 
 export default connect (mapStateToProps, mapDisptchToProps)(TarefasList);
