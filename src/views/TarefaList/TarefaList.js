@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { listar, salvar } from '../../store/tarefasReducer'
+import { listar, salvar, deletar } from '../../store/tarefasReducer'
 
 import { TarefasToolbar, TarefasTable } from './components';
 import {
@@ -52,21 +52,6 @@ const TarefasList = (props) => {
     })
   }
 
-  const deletar = (id) => {
-    axios.delete(`${API_URL}/${id}`, {
-      headers: {'x-tenant-id' : localStorage.getItem('email_usuario_logado')}
-    })
-    .then(response => {
-      const lista = tarefas.filter( tarefas => tarefas.id !== id)
-      setTarefas(lista)
-      setMensagem('item removido com sucesso')
-      setOpenDialog(true)
-    }).catch(erro => {
-      setMensagem('Ocorreu um erro')
-      setOpenDialog(true)
-    })
-  }
-
   useEffect(() => {
     props.listar();
   }, [])
@@ -77,7 +62,7 @@ const TarefasList = (props) => {
       <div className={classes.content}>
         <TarefasTable 
           alterarStatus={alterarStatus} 
-          deleteAction={deletar}
+          deleteAction={props.deletar}
           tarefas={props.tarefas} />
       </div>
       <Dialog open={openDialog} onClose={e => setOpenDialog(false)}>
@@ -98,6 +83,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDisptchToProps = dispatch => 
-bindActionCreators({listar, salvar}, dispatch)
+bindActionCreators({listar, salvar, deletar}, dispatch)
 
 export default connect (mapStateToProps, mapDisptchToProps)(TarefasList);
