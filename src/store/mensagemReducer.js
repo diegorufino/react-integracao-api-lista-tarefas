@@ -1,6 +1,6 @@
 const ESTADO_INICIAL = {
-    mensagem: 'Olá',
-    mostrarMensagem: true
+    mensagem: '',
+    mostrarMensagem: false
 }
 
 export const ACTIONS = {
@@ -10,7 +10,7 @@ export const ACTIONS = {
 
 export function mensagemReducer(state = ESTADO_INICIAL, action){
     switch(action.type){
-        case ACTIONS.MOSTRAR_MENSGAEM:
+        case ACTIONS.MOSTRAR_MENSAGEM:
             return {...state, mensagem: action.mensagem, mostrarMensagem: true}
         case ACTIONS.ESCONDER_MENSAGEM:
             return {...state, mensagem: '', mostrarMensagem: false}
