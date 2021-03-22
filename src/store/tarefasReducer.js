@@ -13,22 +13,32 @@ const ACTIONS = {
 }
 
 const ESTADO_INICIAL = {
-    tarefas: []
+    tarefas: [],
+    quantidade: 0
 }
 
 export const tarefaReducer = (state = ESTADO_INICIAL, action) => {
     switch(action.type){
         case ACTIONS.LISTAR:
-            return {...state, tarefas: action.tarefas }
+            return {...state, 
+                tarefas: action.tarefas, 
+                quantidade: action.tarefas.length }
         case ACTIONS.ADD:
-            return {...state, tarefas: [...state.tarefas, action.tarefa] }
+            const lista = [...state.tarefas, action.tarefa]
+            return {...state, 
+                tarefas:  lista,
+                quantidade: lista.length
+            }
         case ACTIONS.REMOVER:
             const id = action.id
             const tarefas = state.tarefas.filter( tarefas => tarefas.id !== id)
-            return {...state, tarefas: tarefas}
+            return {...state, 
+                tarefas: tarefas,
+                quantidade: tarefas.length
+            }
         case ACTIONS.UPDATE_STATUS:
-            const lista = [...state.tarefas]
-            lista.forEach(tarefa => {
+            const listaAtualizada = [...state.tarefas]
+            listaAtualizada.forEach(tarefa => {
                 if(tarefa.id === action.id){
                     tarefa.done = true;
                 }
