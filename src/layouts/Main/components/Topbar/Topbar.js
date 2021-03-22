@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -11,7 +11,6 @@ import { withRouter } from 'react-router-dom'
 
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { TarefasTable } from 'views/TarefaList/components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,8 +28,6 @@ const Topbar = props => {
   const { className, onSidebarOpen, ...rest } = props;
 
   const classes = useStyles();
-
-  const [notifications] = useState([]);
 
   const logout = () => {
     localStorage.removeItem('email_usuario_logado')
